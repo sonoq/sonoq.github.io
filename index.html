@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oscar Peribañez - UEFN Verse Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #e5e5e5;
+            background: #0a0a0a;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffed00;
+        }
+
+        /* Scrolling text banner */
+        .scroll-banner {
+            position: relative;
+            background: #ffed00;
+            padding: 30px 0;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scroll-text {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 25s linear infinite;
+        }
+
+        .scroll-text span {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0a0a0a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 30px;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        header {
+            margin-top: 80px;
+            padding: 140px 0 120px;
+            background: #0a0a0a;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 7rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: -5px;
+            line-height: 0.9;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #ffed00;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 80px;
+            color: #fff;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+        }
+
+        .about {
+            background: #0f0f0f;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: start;
+        }
+
+        .about-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            animation: floatImage 6s ease-in-out infinite;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.02);
+        }
+
+        @keyframes floatImage {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .skills {
+            background: #0a0a0a;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-card {
+            background: #0f0f0f;
+            padding: 60px 50px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ffed00;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .skill-card:hover {
+            background: #141414;
+            transform: translateY(-5px);
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .skill-desc {
+            color: #888;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .projects {
+            background: #0f0f0f;
+        }
+
+        .project-card {
+            margin-bottom: 100px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            background: #0a0a0a;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+        }
+
+        .project-card:nth-child(even) {
+            transform: scale(1);
+        }
+
+        .project-card:nth-child(even):hover {
+            transform: scale(1.02);
+        }
+
+        .project-card:nth-child(even) .project-image-wrapper {
+            order: 2;
+        }
+
+        .project-card:nth-child(even) .project-content {
+            order: 1;
+        }
+
+        .project-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 600px;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.08);
+        }
+
+        .project-content {
+            padding: 80px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #141414;
+        }
+
+        .project-tag {
+            display: inline-block;
+            background: #ffed00;
+            color: #0a0a0a;
+            padding: 10px 24px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            width: fit-content;
+        }
+
+        .project-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .project-desc {
+            color: #999;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .contact {
+            background: #0a0a0a;
+            color: #fff;
+            text-align: center;
+            padding: 150px 0;
+            position: relative;
+        }
+
+        .contact-text {
+            font-size: 1.3rem;
+            color: #888;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 22px 55px;
+            background: transparent;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.4s ease;
+            z-index: 0;
+        }
+
+        .contact-link:hover::before {
+            left: 100%;
+        }
+
+        .contact-link:hover {
+            border-color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .contact-link.primary {
+            background: #ffed00;
+            border: none;
+            color: #0a0a0a;
+            font-weight: 800;
+        }
+
+        .contact-link.primary:hover {
+            background: #ffd700;
+            transform: translateY(-5px);
+        }
+
+        footer {
+            background: #0a0a0a;
+            text-align: center;
+            padding: 40px;
+            color: #555;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            margin-bottom: 100px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .hero-image-item {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+        }
+
+        .hero-image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .hero-image-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: #fff;
+        }
+
+        .hero-image-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container, .nav-content {
+                padding: 0 40px;
+            }
+
+            h1 {
+                font-size: 4.5rem;
+            }
+
+            .section-title {
+                font-size: 3rem;
+            }
+
+            .about-content, .project-card {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .project-card:nth-child(even) .project-image-wrapper,
+            .project-card:nth-child(even) .project-content {
+                order: initial;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-image-wrapper {
+                height: 400px;
+            }
+
+            .nav-links {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+                letter-spacing: -2px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .scroll-text span {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .container, .nav-content {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .project-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">Oscar Peribañez</div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <h1>OSCAR<br>PERIBAÑEZ</h1>
+            <p class="subtitle">UEFN Verse Developer</p>
+        </div>
+    </header>
+
+    <div class="scroll-banner">
+        <div class="scroll-text">
+            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
+            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
+            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
+        </div>
+    </div>
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="hero-images">
+                <div class="hero-image-item">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=400&fit=crop" alt="Development">
+                    <div class="hero-image-overlay">
+                        <div class="hero-image-title">Interactive Experiences</div>
+                    </div>
+                </div>
+                <div class="hero-image-item">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=400&fit=crop" alt="Code">
+                    <div class="hero-image-overlay">
+                        <div class="hero-image-title">Clean Architecture</div>
+                    </div>
+                </div>
+            </div>
+            <h2 class="section-title">About</h2>
+            <div class="about-content">
+                <div>
+                    <p class="about-text">
+                        I'm a passionate UEFN Verse developer creating innovative and engaging experiences 
+                        within Fortnite Creative.
+                    </p>
+                    <p class="about-text">
+                        Specializing in custom game mechanics, interactive systems, and pushing the boundaries 
+                        of what's possible with Verse and the Unreal Editor for Fortnite.
+                    </p>
+                </div>
+                <div class="about-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=700&h=500&fit=crop" alt="Workspace" class="about-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skills" id="skills">
+        <div class="container">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-title">Verse Programming</div>
+                    <p class="skill-desc">Expert in custom game logic, advanced mechanics, and system architecture</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-title">UEFN</div>
+                    <p class="skill-desc">Level design, environment creation, and asset integration</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-title">Game Systems</div>
+                    <p class="skill-desc">UI design, inventory systems, and player progression mechanics</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-title">Optimization</div>
+                    <p class="skill-desc">Performance tuning and memory management for smooth gameplay</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            
+            <div class="project-card">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=900&h=600&fit=crop" alt="Music game" class="project-image">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Music Game</span>
+                    <div class="project-title">GUESS THE SONG</div>
+                    <p class="project-desc">
+                        An interactive music guessing game built with custom Verse mechanics. Features dynamic 
+                        audio integration, scoring systems, and engaging multiplayer gameplay that challenges 
+                        players' musical knowledge in real-time.
+                    </p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&h=600&fit=crop" alt="Horror game" class="project-image">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Horror</span>
+                    <div class="project-title">ESCAPE MC JACKSON</div>
+                    <p class="project-desc">
+                        A thrilling horror escape experience featuring atmospheric environments, custom AI behavior, 
+                        and intense gameplay mechanics. Built with advanced Verse scripting to create suspenseful 
+                        moments and challenging puzzle elements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="contact-text">
+                Interested in collaborating or have a project in mind? Let's create something amazing together.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:oscar@example.com" class="contact-link primary">Email Me</a>
+                <a href="#" class="contact-link">Twitter</a>
+                <a href="#" class="contact-link">Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Oscar Peribañez. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
