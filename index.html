@@ -177,11 +177,6 @@
             width: 100%;
             height: 500px;
             object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .about-image:hover {
-            transform: scale(1.02);
         }
 
         @keyframes floatImage {
@@ -260,6 +255,7 @@
             gap: 0;
             background: #0a0a0a;
             transition: transform 0.4s ease;
+            align-items: stretch;
         }
 
         .project-card:hover {
@@ -285,8 +281,7 @@
         .project-image-wrapper {
             position: relative;
             overflow: hidden;
-            height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            width: 100%;
         }
 
         .project-image {
@@ -508,7 +503,11 @@
 
             .project-image-wrapper {
                 height: auto;
-                padding-bottom: 56.25%;
+            }
+
+            .project-image {
+                position: relative;
+                height: 400px;
             }
 
             .nav-links {
@@ -574,9 +573,9 @@
 
     <div class="scroll-banner">
         <div class="scroll-text">
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
         </div>
     </div>
 
@@ -669,8 +668,8 @@
             </p>
             <div class="contact-links">
                 <a href="#" class="contact-link primary">Discord</a>
-                <a href="mailto:oscar@example.com" class="contact-link">Email</a>
                 <a href="#" class="contact-link">Twitter</a>
+                <a href="mailto:oscar@example.com" class="contact-link">Email</a>
             </div>
         </div>
     </section>
