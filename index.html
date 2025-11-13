@@ -285,10 +285,14 @@
         .project-image-wrapper {
             position: relative;
             overflow: hidden;
-            height: 600px;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
         }
 
         .project-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -503,7 +507,8 @@
             }
 
             .project-image-wrapper {
-                height: 400px;
+                height: auto;
+                padding-bottom: 56.25%;
             }
 
             .nav-links {
@@ -569,28 +574,14 @@
 
     <div class="scroll-banner">
         <div class="scroll-text">
-            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
-            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
-            <span>CREATIVE CODING • GAME DEVELOPMENT • INTERACTIVE EXPERIENCES • </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
+            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INOVATION | </span>
         </div>
     </div>
 
     <section class="about" id="about">
         <div class="container">
-            <div class="hero-images">
-                <div class="hero-image-item">
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=400&fit=crop" alt="Development">
-                    <div class="hero-image-overlay">
-                        <div class="hero-image-title">Interactive Experiences</div>
-                    </div>
-                </div>
-                <div class="hero-image-item">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=400&fit=crop" alt="Code">
-                    <div class="hero-image-overlay">
-                        <div class="hero-image-title">Clean Architecture</div>
-                    </div>
-                </div>
-            </div>
             <h2 class="section-title">About</h2>
             <div class="about-content">
                 <div>
@@ -677,9 +668,9 @@
                 Interested in collaborating or have a project in mind? Let's create something amazing together.
             </p>
             <div class="contact-links">
-                <a href="mailto:oscar@example.com" class="contact-link primary">Email Me</a>
+                <a href="#" class="contact-link primary">Discord</a>
+                <a href="mailto:oscar@example.com" class="contact-link">Email</a>
                 <a href="#" class="contact-link">Twitter</a>
-                <a href="#" class="contact-link">Discord</a>
             </div>
         </div>
     </section>
