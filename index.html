@@ -126,24 +126,33 @@
         .scroll-banner {
             position: relative;
             background: #ffed00;
-            padding: 30px 0;
+            padding: 0;
             overflow: hidden;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 100px;
+            display: flex;
+            align-items: center;
         }
 
         .scroll-text {
             display: flex;
             white-space: nowrap;
-            animation: scroll 25s linear infinite;
+            animation: scroll 50s linear infinite;
         }
 
         .scroll-text span {
-            font-size: 2.5rem;
+            font-size: 4.5rem;
             font-weight: 900;
             color: #0a0a0a;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 30px;
+            letter-spacing: 0px;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .scroll-text span::after {
+            content: ' • ';
+            padding: 0 80px;
         }
 
         @keyframes scroll {
@@ -254,9 +263,11 @@
             padding: 50px 30px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
+            transition: transform 0.1s ease, background 0.4s ease, border-color 0.4s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transform-style: preserve-3d;
         }
 
         .stat-card::before {
@@ -449,6 +460,13 @@
             font-weight: 300;
         }
 
+        .contact-text-word {
+            color: #ffed00;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
         .contact-links {
             display: flex;
             justify-content: center;
@@ -514,6 +532,82 @@
             font-weight: 300;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .discord-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(20, 20, 20, 0.98);
+            backdrop-filter: blur(20px);
+            border: 2px solid #ffed00;
+            padding: 50px 60px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 400px;
+        }
+
+        .discord-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .discord-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .discord-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .discord-popup h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffed00;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .discord-popup p {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .discord-popup-close {
+            background: #ffed00;
+            color: #0a0a0a;
+            border: none;
+            padding: 15px 40px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .discord-popup-close:hover {
+            background: #ffd700;
+            transform: translateY(-2px);
         }
 
         .hero-images {
@@ -623,7 +717,11 @@
             }
 
             .scroll-text span {
-                font-size: 1.5rem;
+                font-size: 2rem;
+            }
+
+            .scroll-banner {
+                height: 70px;
             }
 
             section {
@@ -653,6 +751,11 @@
             .project-title {
                 font-size: 2rem;
             }
+
+            .discord-popup {
+                min-width: 90%;
+                padding: 40px 30px;
+            }
         }
     </style>
 </head>
@@ -661,7 +764,7 @@
         <div class="nav-content">
             <div class="logo">Oscar Peribañez</div>
             <div class="nav-links">
-                <div class="home-hub-toggle" onclick="toggleDropdown()">HOME HUB</div>
+                <div class="home-hub-toggle" onclick="toggleDropdown()">NAVIGATION</div>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="#about" onclick="closeDropdown()">About</a>
                     <a href="#skills" onclick="closeDropdown()">Skills</a>
@@ -681,37 +784,39 @@
 
     <div class="scroll-banner">
         <div class="scroll-text">
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
-            <span>VERSE CODING | UEFN DEVELOPMENT | SCENEGRAPH INNOVATION | </span>
+            <span>VERSE CODING</span>
+            <span>UEFN DEVELOPMENT</span>
+            <span>SCENEGRAPH INNOVATION</span>
+            <span>VERSE CODING</span>
+            <span>UEFN DEVELOPMENT</span>
+            <span>SCENEGRAPH INNOVATION</span>
+            <span>VERSE CODING</span>
+            <span>UEFN DEVELOPMENT</span>
+            <span>SCENEGRAPH INNOVATION</span>
         </div>
     </div>
 
     <section class="about" id="about">
         <div class="container">
-            <h2 class="section-title">About</h2>
             <div class="about-content">
                 <div class="about-intro">
                     <p class="about-text">
-                        I'm a <span class="about-highlight">UEFN Verse developer</span> creating innovative and engaging experiences within Fortnite Creative.
-                    </p>
-                    <p class="about-text">
-                        Specializing in <span class="about-highlight">custom game mechanics</span>, interactive systems, and pushing the boundaries of what's possible with Verse and the Unreal Editor for Fortnite.
+                        I'm a <span class="about-highlight">UEFN Verse developer</span> creating innovative and engaging experiences within Fortnite Creative. Specializing in <span class="about-highlight">custom game mechanics</span>, interactive systems, and pushing the boundaries of what's possible with Verse and the Unreal Editor for Fortnite.
                     </p>
                 </div>
                 
                 <div class="about-stats">
-                    <div class="stat-card">
-                        <div class="stat-number">50+</div>
-                        <div class="stat-label">Projects Created</div>
+                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
+                        <div class="stat-number">0+</div>
+                        <div class="stat-label">Projects Helped</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">2M+</div>
+                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
+                        <div class="stat-number">0+</div>
                         <div class="stat-label">Total Plays</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Passion Driven</div>
+                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
+                        <div class="stat-number">0+</div>
+                        <div class="stat-label">Followers</div>
                     </div>
                 </div>
             </div>
@@ -781,12 +886,12 @@
         <div class="container">
             <h2 class="section-title">Get In Touch</h2>
             <p class="contact-text">
-                Let's create something amazing together.
+                Let's create something <span class="contact-text-word" id="changingWord">AMAZING</span> together.
             </p>
             <div class="contact-links">
-                <a href="#" class="contact-link primary">Discord</a>
-                <a href="#" class="contact-link">Twitter</a>
-                <a href="mailto:oscar@example.com" class="contact-link">Email</a>
+                <a href="#" class="contact-link primary" onclick="showDiscord(event)">Discord</a>
+                <a href="https://x.com/sonoq_" class="contact-link" target="_blank">Twitter</a>
+                <a href="mailto:oscarperibanyez@gmail.com" class="contact-link">Email</a>
             </div>
         </div>
     </section>
@@ -796,6 +901,13 @@
             <p>&copy; 2024 Oscar Peribañez. All rights reserved.</p>
         </div>
     </footer>
+
+    <div class="discord-popup-overlay" id="discordOverlay" onclick="closeDiscordPopup()"></div>
+    <div class="discord-popup" id="discordPopup">
+        <h3>Add Me</h3>
+        <p>@sonoq</p>
+        <button class="discord-popup-close" onclick="closeDiscordPopup()">Close</button>
+    </div>
 
     <script>
         function toggleDropdown() {
@@ -807,6 +919,132 @@
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.remove('active');
         }
+
+        function showDiscord(event) {
+            event.preventDefault();
+            document.getElementById('discordOverlay').classList.add('active');
+            document.getElementById('discordPopup').classList.add('active');
+        }
+
+        function closeDiscordPopup() {
+            document.getElementById('discordOverlay').classList.remove('active');
+            document.getElementById('discordPopup').classList.remove('active');
+        }
+
+        // Mouse follow effect for stat cards
+        function handleMouseMove(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+            
+            const moveX = deltaX * 15;
+            const moveY = deltaY * 15;
+            
+            card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+
+        function handleMouseLeave(card) {
+            card.style.transform = 'translate(0, 0)';
+        }
+
+        // Animate numbers
+        function animateNumber(element, target) {
+            const duration = 2000;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    if (target >= 1000000) {
+                        element.textContent = (target / 1000000).toFixed(0) + 'M+';
+                    } else if (target >= 1000) {
+                        element.textContent = (target / 1000).toFixed(1) + 'K+';
+                    } else {
+                        element.textContent = target + '+';
+                    }
+                    clearInterval(timer);
+                } else {
+                    if (target >= 1000000) {
+                        element.textContent = (current / 1000000).toFixed(1) + 'M+';
+                    } else if (target >= 1000) {
+                        element.textContent = (current / 1000).toFixed(1) + 'K+';
+                    } else {
+                        element.textContent = Math.floor(current) + '+';
+                    }
+                }
+            }, 16);
+        }
+
+        // Intersection Observer for number animation
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                    entry.target.classList.add('animated');
+                    const numbers = entry.target.querySelectorAll('.stat-number');
+                    numbers.forEach((num, index) => {
+                        const targets = [10, 20000000, 1500];
+                        animateNumber(num, targets[index]);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe the stats section
+        document.addEventListener('DOMContentLoaded', () => {
+            const statsSection = document.querySelector('.about-stats');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+
+            // Changing word animation with letter-by-letter erase/rewrite
+            const words = ['AMAZING', 'CREATIVE', 'BREATHTAKING', 'INNOVATIVE', 'EXTRAORDINARY', 'EPIC'];
+            let currentIndex = 0;
+            const wordElement = document.getElementById('changingWord');
+            let isAnimating = false;
+
+            async function eraseWord(word) {
+                for (let i = word.length; i >= 0; i--) {
+                    wordElement.textContent = word.substring(0, i);
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+            }
+
+            async function writeWord(word) {
+                for (let i = 0; i <= word.length; i++) {
+                    wordElement.textContent = word.substring(0, i);
+                    await new Promise(resolve => setTimeout(resolve, 80));
+                }
+            }
+
+            async function changeWord() {
+                if (isAnimating) return;
+                isAnimating = true;
+
+                const currentWord = words[currentIndex];
+                await eraseWord(currentWord);
+                
+                currentIndex = (currentIndex + 1) % words.length;
+                const nextWord = words[currentIndex];
+                
+                await writeWord(nextWord);
+                isAnimating = false;
+            }
+
+            // Start the animation cycle
+            setInterval(changeWord, 4000);
+        });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
