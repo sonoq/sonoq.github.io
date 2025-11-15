@@ -63,20 +63,39 @@
         .home-hub-toggle {
             color: #fff;
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
-            padding: 12px 28px;
+            padding: 10px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            position: relative;
         }
 
         .home-hub-toggle:hover {
             border-color: #ffed00;
-            color: #ffed00;
+        }
+
+        .home-hub-toggle:hover .menu-icon span {
+            background: #ffed00;
+        }
+
+        .menu-icon {
+            width: 22px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-icon span {
+            width: 100%;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
         }
 
         .dropdown-menu {
@@ -319,58 +338,84 @@
 
         .skills {
             background: #0a0a0a;
+            position: relative;
         }
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-            background: rgba(255, 255, 255, 0.05);
+            grid-template-columns: 1fr;
+            gap: 0;
         }
 
         .skill-card {
             background: #0f0f0f;
-            padding: 60px 50px;
-            transition: all 0.4s ease;
+            padding: 80px 60px;
+            transition: all 0.5s ease;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .skill-card:last-child {
+            border-bottom: none;
         }
 
         .skill-card::before {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
-            width: 100%;
-            height: 2px;
+            top: 0;
+            width: 4px;
+            height: 100%;
             background: #ffed00;
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.5s ease;
         }
 
         .skill-card:hover {
             background: #141414;
-            transform: translateY(-5px);
+            padding-left: 80px;
         }
 
         .skill-card:hover::before {
-            transform: scaleX(1);
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .skill-title {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 900;
             color: #fff;
-            margin-bottom: 15px;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .skill-card:hover .skill-title {
+            color: #ffed00;
+        }
+
+        .skill-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.1);
+            letter-spacing: -1px;
         }
 
         .skill-desc {
             color: #888;
-            font-size: 1.1rem;
-            line-height: 1.7;
+            font-size: 1.2rem;
+            line-height: 1.8;
             font-weight: 300;
+            max-width: 700px;
         }
 
         .projects {
@@ -693,8 +738,16 @@
                 grid-template-columns: 1fr;
             }
 
-            .skills-grid {
-                grid-template-columns: 1fr;
+            .skill-title {
+                font-size: 2.5rem;
+            }
+
+            .skill-card {
+                padding: 60px 40px;
+            }
+
+            .skill-card:hover {
+                padding-left: 60px;
             }
 
             .nav-links {
@@ -733,7 +786,7 @@
             }
 
             .nav-links {
-                display: none;
+                display: flex;
             }
 
             .about-text {
@@ -752,6 +805,26 @@
                 font-size: 2rem;
             }
 
+            .skill-title {
+                font-size: 2rem;
+            }
+
+            .skill-card {
+                padding: 50px 30px;
+            }
+
+            .skill-card:hover {
+                padding-left: 50px;
+            }
+
+            .skill-number {
+                font-size: 1.5rem;
+            }
+
+            .skill-desc {
+                font-size: 1rem;
+            }
+
             .discord-popup {
                 min-width: 90%;
                 padding: 40px 30px;
@@ -764,7 +837,13 @@
         <div class="nav-content">
             <div class="logo">Oscar Peribañez</div>
             <div class="nav-links">
-                <div class="home-hub-toggle" onclick="toggleDropdown()">NAVIGATION</div>
+                <div class="home-hub-toggle" onclick="toggleDropdown()">
+                    <div class="menu-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="#about" onclick="closeDropdown()">About</a>
                     <a href="#skills" onclick="closeDropdown()">Skills</a>
@@ -828,20 +907,32 @@
             <h2 class="section-title">Skills</h2>
             <div class="skills-grid">
                 <div class="skill-card">
-                    <div class="skill-title">Verse Programming</div>
-                    <p class="skill-desc">Expert in custom game logic, advanced mechanics, and system architecture</p>
+                    <div class="skill-header">
+                        <div class="skill-title">Verse Programming</div>
+                        <div class="skill-number">01</div>
+                    </div>
+                    <p class="skill-desc">Expert in custom game logic, advanced mechanics, and system architecture. Building complex gameplay systems from scratch with clean, maintainable code.</p>
                 </div>
                 <div class="skill-card">
-                    <div class="skill-title">UEFN</div>
-                    <p class="skill-desc">Level design, environment creation, and asset integration</p>
+                    <div class="skill-header">
+                        <div class="skill-title">UEFN Mastery</div>
+                        <div class="skill-number">02</div>
+                    </div>
+                    <p class="skill-desc">Level design, environment creation, and seamless asset integration. Crafting immersive worlds that push the boundaries of Fortnite Creative.</p>
                 </div>
                 <div class="skill-card">
-                    <div class="skill-title">Game Systems</div>
-                    <p class="skill-desc">UI design, inventory systems, and player progression mechanics</p>
+                    <div class="skill-header">
+                        <div class="skill-title">Game Systems</div>
+                        <div class="skill-number">03</div>
+                    </div>
+                    <p class="skill-desc">UI design, inventory systems, and player progression mechanics. Creating intuitive interfaces and engaging progression that keeps players coming back.</p>
                 </div>
                 <div class="skill-card">
-                    <div class="skill-title">Optimization</div>
-                    <p class="skill-desc">Performance tuning and memory management for smooth gameplay</p>
+                    <div class="skill-header">
+                        <div class="skill-title">Optimization</div>
+                        <div class="skill-number">04</div>
+                    </div>
+                    <p class="skill-desc">Performance tuning and memory management for smooth gameplay. Ensuring every experience runs flawlessly across all platforms.</p>
                 </div>
             </div>
         </div>
