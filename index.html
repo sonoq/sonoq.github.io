@@ -1,1154 +1,643 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oscar Peribañez - UEFN Verse Developer</title>
+    <title>Oscar Peribañez | UEFN Verse Developer</title>
+    <meta name="description" content="Portfolio of Oscar Peribañez, UEFN Verse Developer specializing in Scene Graph mechanics and optimization.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            /* Dark Mode (Default) */
+            --bg: #0a0a0a;
+            --bg-secondary: #111111;
+            --text: #f5f5f5;
+            --accent: #3aad28; /* Green */
+
+            --card-bg: #171717;
+            --border: #262626;
+            --border-light: #404040;
+            /* Líneas de la cuadrícula más oscuras para dark mode */
+            --grid-line: #171717;
+            --text-muted: #737373;
+            --text-muted-light: #a3a3a3;
+            --text-muted-lighter: #d4d4d4;
+        }
+
+        [data-theme="light"] {
+            /* Light Mode */
+            --bg: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text: #0a0a0a;
+            --accent: #3aad28;
+            --card-bg: #ffffff;
+            --border: #e5e5e5;
+            --border-light: #d4d4d4;
+            /* Líneas de la cuadrícula normales para light mode */
+            --grid-line: #e5e5e5;
+            --text-muted: #525252;
+            --text-muted-light: #404040;
+            --text-muted-lighter: #262626;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #e5e5e5;
-            background: #0a0a0a;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 60px;
+        /* Custom utility for text outlines - adapted for theme */
+        .stroke-text {
+            -webkit-text-stroke: 1px var(--text);
+            color: transparent;
         }
 
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        .stroke-text-bold {
+            -webkit-text-stroke: 2px var(--text);
+            color: transparent;
         }
 
-        .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
+        /* Smooth hover transitions */
+        .hover-accent {
+            transition: all 0.3s ease;
         }
 
-        .logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
-        }
+            .hover-accent:hover {
+                color: var(--accent);
+            }
 
-        .nav-links {
+        /* Magnetic Card Effect */
+        .magnetic-wrap {
+            display: inline-block;
             position: relative;
         }
 
-        .home-hub-toggle {
-            color: #fff;
-            text-decoration: none;
-            cursor: pointer;
-            padding: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 46px;
-            height: 46px;
-            position: relative;
+        .magnetic-card {
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Faster transition for snappier feel */
+            will-change: transform;
         }
 
-        .home-hub-toggle:hover {
-            border-color: #ffed00;
-        }
-
-        .home-hub-toggle:hover .menu-icon span {
-            background: #ffed00;
-        }
-
-        .menu-icon {
-            width: 22px;
-            height: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .menu-icon span {
-            width: 100%;
-            height: 2px;
-            background: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 20px);
-            right: 0;
-            background: rgba(20, 20, 20, 0.98);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-width: 200px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .dropdown-menu.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-menu a {
-            display: block;
-            color: #999;
-            text-decoration: none;
-            padding: 18px 25px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .dropdown-menu a:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-menu a:hover {
-            background: rgba(255, 237, 0, 0.1);
-            color: #ffed00;
-            padding-left: 35px;
-        }
-
-        .scroll-banner {
-            position: relative;
-            background: #ffed00;
-            padding: 0;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 100px;
-            display: flex;
-            align-items: center;
-        }
-
-        .scroll-text {
-            display: flex;
-            white-space: nowrap;
-            animation: scroll 50s linear infinite;
-        }
-
-        .scroll-text span {
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: #0a0a0a;
-            text-transform: uppercase;
-            letter-spacing: 0px;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .scroll-text span::after {
-            content: ' • ';
-            padding: 0 80px;
-        }
-
-        @keyframes scroll {
+        /* Custom Marquee Animation */
+        @keyframes marquee {
             0% {
                 transform: translateX(0);
             }
+
             100% {
                 transform: translateX(-50%);
             }
         }
 
-        header {
-            margin-top: 80px;
-            padding: 140px 0 120px;
-            background: #0a0a0a;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
         }
 
-        h1 {
-            font-size: 7rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            color: #fff;
-            letter-spacing: -5px;
-            line-height: 0.9;
-            animation: fadeInUp 0.8s ease-out;
+        /* Custom Selection Color */
+        ::selection {
+            background-color: var(--accent);
+            color: black;
         }
 
-        .subtitle {
-            font-size: 1.4rem;
-            color: #ffed00;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
-        }
-
-        section {
-            padding: 120px 0;
-            position: relative;
-        }
-
-        .section-title {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 80px;
-            color: #fff;
-            letter-spacing: -3px;
-            text-transform: uppercase;
-        }
-
-        .about {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about::before {
+        /* Typewriter Cursor */
+        .typing-cursor::after {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 237, 0, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 237, 0, 0.02) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .about-content {
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .about-intro {
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .about-text {
-            font-size: 1.5rem;
-            line-height: 1.8;
-            color: #e5e5e5;
-            font-weight: 400;
-            margin-bottom: 20px;
-        }
-
-        .about-highlight {
-            color: #ffed00;
-            font-weight: 700;
-        }
-
-        .about-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin-top: 60px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 50px 30px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.1s ease, background 0.4s ease, border-color 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transform-style: preserve-3d;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ffed00, transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-5px);
-            border-color: rgba(255, 237, 0, 0.3);
-        }
-
-        .stat-card:hover::before {
-            transform: translateX(100%);
-        }
-
-        .stat-number {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #ffed00;
-            line-height: 1;
-            margin-bottom: 15px;
-            letter-spacing: -2px;
-        }
-
-        .stat-label {
-            font-size: 0.95rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        .about-image-wrapper {
-            display: none;
-        }
-
-        .about-image {
-            display: none;
-        }
-
-        .skills {
-            background: #0a0a0a;
-            position: relative;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0;
-        }
-
-        .skill-card {
-            background: #0f0f0f;
-            padding: 80px 60px;
-            transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .skill-card:last-child {
-            border-bottom: none;
-        }
-
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background: #ffed00;
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 0.5s ease;
-        }
-
-        .skill-card:hover {
-            background: #141414;
-            padding-left: 80px;
-        }
-
-        .skill-card:hover::before {
-            transform: scaleY(1);
-            transform-origin: top;
-        }
-
-        .skill-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .skill-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-        }
-
-        .skill-card:hover .skill-title {
-            color: #ffed00;
-        }
-
-        .skill-number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.1);
-            letter-spacing: -1px;
-        }
-
-        .skill-desc {
-            color: #888;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            font-weight: 300;
-            max-width: 700px;
-        }
-
-        .projects {
-            background: #0f0f0f;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 60px;
-        }
-
-        .project-card {
-            background: #0a0a0a;
-            transition: transform 0.4s ease;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .project-card:hover {
-            transform: scale(1.03);
-        }
-
-        .project-image-wrapper {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-bottom: 56.25%;
-            background: #141414;
-        }
-
-        .project-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .project-content {
-            padding: 30px 25px;
-        }
-
-        .project-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .project-tag {
             display: inline-block;
-            background: #ffed00;
-            color: #0a0a0a;
-            padding: 8px 20px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            width: 0.1em;
+            height: 1em;
+            background-color: var(--accent);
+            margin-left: 0.1em;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
         }
 
-        .contact {
-            background: #0a0a0a;
-            color: #fff;
-            text-align: center;
-            padding: 150px 0;
-            position: relative;
-        }
-
-        .contact-text {
-            font-size: 1.3rem;
-            color: #888;
-            margin-bottom: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            font-weight: 300;
-        }
-
-        .contact-text-word {
-            color: #ffed00;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            padding: 22px 55px;
-            background: transparent;
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: left 0.4s ease;
-            z-index: 0;
-        }
-
-        .contact-link:hover::before {
-            left: 100%;
-        }
-
-        .contact-link:hover {
-            border-color: #fff;
-            transform: translateY(-3px);
-        }
-
-        .contact-link.primary {
-            background: #ffed00;
-            border: none;
-            color: #0a0a0a;
-            font-weight: 800;
-        }
-
-        .contact-link.primary:hover {
-            background: #ffd700;
-            transform: translateY(-5px);
-        }
-
-        footer {
-            background: #0a0a0a;
-            text-align: center;
-            padding: 40px;
-            color: #555;
-            font-size: 0.85rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            font-weight: 300;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .discord-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: rgba(20, 20, 20, 0.98);
-            backdrop-filter: blur(20px);
-            border: 2px solid #ffed00;
-            padding: 50px 60px;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            text-align: center;
-            min-width: 400px;
-        }
-
-        .discord-popup.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .discord-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .discord-popup-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .discord-popup h3 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ffed00;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-        }
-
-        .discord-popup p {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 30px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .discord-popup-close {
-            background: #ffed00;
-            color: #0a0a0a;
-            border: none;
-            padding: 15px 40px;
-            font-size: 0.9rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .discord-popup-close:hover {
-            background: #ffd700;
-            transform: translateY(-2px);
-        }
-
-        .hero-images {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-            margin-bottom: 100px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .hero-image-item {
-            position: relative;
-            overflow: hidden;
-            height: 400px;
-        }
-
-        .hero-image-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .hero-image-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .hero-image-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 40px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            color: #fff;
-        }
-
-        .hero-image-title {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
+        @keyframes blink {
+            0%, 100% {
                 opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .container, .nav-content {
-                padding: 0 40px;
             }
 
-            h1 {
-                font-size: 4.5rem;
-            }
-
-            .section-title {
-                font-size: 3rem;
-            }
-
-            .about-content {
-                gap: 40px;
-            }
-
-            .about-stats {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .stat-number {
-                font-size: 3rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skill-title {
-                font-size: 2.5rem;
-            }
-
-            .skill-card {
-                padding: 60px 40px;
-            }
-
-            .skill-card:hover {
-                padding-left: 60px;
-            }
-
-            .nav-links {
-                gap: 30px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 3rem;
-                letter-spacing: -2px;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-
-            .scroll-text span {
-                font-size: 2rem;
-            }
-
-            .scroll-banner {
-                height: 70px;
-            }
-
-            section {
-                padding: 80px 0;
-            }
-
-            .container, .nav-content {
-                padding: 0 20px;
-            }
-
-            .nav-links {
-                display: flex;
-            }
-
-            .about-text {
-                font-size: 1.2rem;
-            }
-
-            .about-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .project-title {
-                font-size: 2rem;
-            }
-
-            .skill-title {
-                font-size: 2rem;
-            }
-
-            .skill-card {
-                padding: 50px 30px;
-            }
-
-            .skill-card:hover {
-                padding-left: 50px;
-            }
-
-            .skill-number {
-                font-size: 1.5rem;
-            }
-
-            .skill-desc {
-                font-size: 1rem;
-            }
-
-            .discord-popup {
-                min-width: 90%;
-                padding: 40px 30px;
+            50% {
+                opacity: 0;
             }
         }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        swiss: {
+                            black: 'var(--bg)',
+                            dark: 'var(--bg-secondary)',
+                            white: 'var(--text)',
+                            yellow: 'var(--accent)',
+                            grid: 'var(--grid-line)',
+                        },
+                        neutral: {
+                            900: 'var(--card-bg)',
+                            800: 'var(--border)',
+                            700: 'var(--border-light)',
+                            500: 'var(--text-muted)',
+                            400: 'var(--text-muted-light)',
+                            300: 'var(--text-muted-lighter)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <nav>
-        <div class="nav-content">
-            <div class="logo">Oscar Peribañez</div>
-            <div class="nav-links">
-                <div class="home-hub-toggle" onclick="toggleDropdown()">
-                    <div class="menu-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-swiss-black/90 backdrop-blur-md border-b border-neutral-800 transition-colors duration-300">
+        <div class="max-w-[1920px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-3 h-3 bg-swiss-yellow transition-transform group-hover:scale-150 duration-300"></div>
+                <span class="text-xl font-bold tracking-tighter">OSCAR<span class="text-swiss-yellow">.</span>DEV</span>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-12">
+                <div class="flex space-x-12 text-xs font-bold tracking-[0.2em] uppercase">
+                    <a href="#projects" class="hover:text-swiss-yellow transition-colors relative group">
+                        Projects
+                        <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="hover:text-swiss-yellow transition-colors relative group">
+                        Contact
+                        <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
+                    </a>
                 </div>
-                <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="#about" onclick="closeDropdown()">About</a>
-                    <a href="#skills" onclick="closeDropdown()">Skills</a>
-                    <a href="#projects" onclick="closeDropdown()">Projects</a>
-                    <a href="#contact" onclick="closeDropdown()">Contact</a>
-                </div>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-neutral-800 transition-colors text-swiss-white" aria-label="Toggle Dark Mode">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block" id="icon-sun"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden" id="icon-moon"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button & Theme Toggle -->
+            <div class="flex items-center gap-4 md:hidden">
+                <button id="theme-toggle-mobile" class="text-swiss-white hover:text-swiss-yellow transition-colors">
+                    <i data-lucide="sun" class="w-5 h-5 hidden" id="mobile-icon-sun"></i>
+                    <i data-lucide="moon" class="w-5 h-5" id="mobile-icon-moon"></i>
+                </button>
+                <button class="text-swiss-white hover:text-swiss-yellow transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
             </div>
         </div>
     </nav>
 
-    <header>
-        <div class="container">
-            <h1>OSCAR<br>PERIBAÑEZ</h1>
-            <p class="subtitle">UEFN Verse Developer</p>
-        </div>
-    </header>
+    <!-- Main Layout -->
+    <main class="pt-20 max-w-[1920px] mx-auto border-l border-r border-neutral-800 min-h-screen relative transition-colors duration-300">
 
-    <div class="scroll-banner">
-        <div class="scroll-text">
-            <span>VERSE CODING</span>
-            <span>UEFN DEVELOPMENT</span>
-            <span>SCENEGRAPH INNOVATION</span>
-            <span>VERSE CODING</span>
-            <span>UEFN DEVELOPMENT</span>
-            <span>SCENEGRAPH INNOVATION</span>
-            <span>VERSE CODING</span>
-            <span>UEFN DEVELOPMENT</span>
-            <span>SCENEGRAPH INNOVATION</span>
+        <!-- Vertical Grid Lines (Background) -->
+        <div class="absolute inset-0 pointer-events-none z-0 grid grid-cols-4 md:grid-cols-12 gap-0 w-full h-full">
+            <div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
         </div>
-    </div>
 
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-intro">
-                    <p class="about-text">
-                        I'm a <span class="about-highlight">UEFN Verse developer</span> creating innovative and engaging experiences within Fortnite Creative. Specializing in <span class="about-highlight">custom game mechanics</span>, interactive systems, and pushing the boundaries of what's possible with Verse and the Unreal Editor for Fortnite.
+        <!-- Scroll Follower Square -->
+        <!-- Z-Index Logic:
+             z-[5] to sit ABOVE grid(0) and Stats(2)
+             but BELOW Hero(10), Expertise(10), Projects(10), Footer(20)
+             Wait, user wants it ON TOP of Quote.
+             So Stats/Quote must be < 5.
+             Hero/Expertise/Projects must be > 5.
+        -->
+        <div id="scroll-square" class="fixed top-32 right-12 md:right-24 w-20 h-20 bg-swiss-yellow z-[5] hidden md:block shadow-[0_0_30px_rgba(58,173,40,0.2)] transition-colors duration-300"></div>
+
+        <!-- Hero Section -->
+        <section class="relative z-10 min-h-[85vh] flex flex-col justify-center border-b border-neutral-800">
+            <div class="grid grid-cols-1 md:grid-cols-12 h-full">
+
+                <!-- Big Headline -->
+                <div class="col-span-1 md:col-span-12 p-6 md:p-12 flex flex-col justify-center">
+                    <h1 class="text-[12vw] md:text-[9rem] xl:text-[11rem] leading-[0.8] font-black tracking-tighter uppercase mix-blend-exclusion mb-6 text-swiss-white transition-colors duration-300">
+                        Oscar<br>
+                        <span class="text-swiss-yellow">Peribañez</span><span class="text-swiss-white">.</span>
+                    </h1>
+                    <h2 class="text-xl md:text-3xl font-bold uppercase tracking-[0.2em] text-neutral-400 pl-1 ml-1 md:ml-2 transition-colors duration-300">
+                        <span id="typewriter" class="text-swiss-yellow"></span><span class="typing-cursor"></span> Developer
+                    </h2>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Expertise Section (Floating Squares) -->
+        <section id="expertise" class="relative z-10 border-b border-neutral-800 bg-swiss-black py-24 overflow-hidden transition-colors duration-300">
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
+                <div class="w-full h-full" style="background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 40px 40px;"></div>
+            </div>
+
+            <div class="max-w-[1920px] mx-auto px-6 md:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24">
+
+                    <!-- Square 01 -->
+                    <div class="magnetic-wrap aspect-square w-full">
+                        <div class="magnetic-card w-full h-full bg-neutral-900 border border-neutral-800 hover:border-swiss-yellow p-8 flex flex-col justify-between group cursor-default transition-colors duration-500 relative overflow-hidden">
+                            <!-- Hover Background -->
+                            <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+
+                            <div class="relative z-10 flex justify-end items-start">
+                                <i data-lucide="gamepad-2" class="w-6 h-6 text-swiss-yellow group-hover:text-swiss-black transition-colors"></i>
+                            </div>
+
+                            <div class="relative z-10 flex flex-col justify-end h-full pb-2">
+                                <h3 class="text-5xl md:text-7xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors">
+                                    <span class="count-up" data-target="20">0</span>M+
+                                </h3>
+                                <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Plays</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Square 02 -->
+                    <div class="magnetic-wrap aspect-square w-full md:mt-12">
+                        <div class="magnetic-card w-full h-full bg-neutral-900 border border-neutral-800 hover:border-swiss-yellow p-8 flex flex-col justify-between group cursor-default transition-colors duration-500 relative overflow-hidden">
+                            <!-- Hover Background -->
+                            <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+
+                            <div class="relative z-10 flex justify-end items-start">
+                                <i data-lucide="briefcase" class="w-6 h-6 text-swiss-yellow group-hover:text-swiss-black transition-colors"></i>
+                            </div>
+
+                            <div class="relative z-10 flex flex-col justify-end h-full pb-2">
+                                <h3 class="text-5xl md:text-7xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors">
+                                    <span class="count-up" data-target="10">0</span>+
+                                </h3>
+                                <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Projects Helped</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Square 03 -->
+                    <div class="magnetic-wrap aspect-square w-full md:mt-24">
+                        <div class="magnetic-card w-full h-full bg-neutral-900 border border-neutral-800 hover:border-swiss-yellow p-8 flex flex-col justify-between group cursor-default transition-colors duration-500 relative overflow-hidden">
+                            <!-- Hover Background -->
+                            <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+
+                            <div class="relative z-10 flex justify-end items-start">
+                                <i data-lucide="users" class="w-6 h-6 text-swiss-yellow group-hover:text-swiss-black transition-colors"></i>
+                            </div>
+
+                            <div class="relative z-10 flex flex-col justify-end h-full pb-2">
+                                <h3 class="text-5xl md:text-7xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors">
+                                    <span class="count-up" data-target="2">0</span>K+
+                                </h3>
+                                <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Followers</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Selected Projects List -->
+        <section id="projects" class="relative z-10 transition-colors duration-300">
+            <!-- Section Header -->
+            <div class="grid grid-cols-1 md:grid-cols-12 border-b border-neutral-800 bg-swiss-black transition-colors duration-300">
+                <div class="col-span-1 md:col-span-3 p-8 md:p-12 border-r border-neutral-800 flex flex-col justify-between transition-colors duration-300">
+                    <div class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-2">Selected Works</div>
+                    <h2 class="text-4xl font-bold leading-tight text-swiss-white">UEFN<br>Projects</h2>
+                </div>
+                <div class="col-span-1 md:col-span-9 p-8 md:p-12 flex items-center">
+                    <p class="text-neutral-400 max-w-xl transition-colors duration-300">
+                        A showcase of technical implementations pushing the boundaries of Fortnite Creative. From custom component systems to automated toolsets.
                     </p>
                 </div>
-                
-                <div class="about-stats">
-                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
-                        <div class="stat-number">0+</div>
-                        <div class="stat-label">Projects Helped</div>
-                    </div>
-                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
-                        <div class="stat-number">0+</div>
-                        <div class="stat-label">Total Plays</div>
-                    </div>
-                    <div class="stat-card" onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)">
-                        <div class="stat-number">0+</div>
-                        <div class="stat-label">Followers</div>
-                    </div>
-                </div>
             </div>
-        </div>
-    </section>
 
-    <section class="skills" id="skills">
-        <div class="container">
-            <h2 class="section-title">Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-header">
-                        <div class="skill-title">Verse Programming</div>
-                        <div class="skill-number">01</div>
-                    </div>
-                    <p class="skill-desc">Expert in custom game logic, advanced mechanics, and system architecture. Building complex gameplay systems from scratch with clean, maintainable code.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-header">
-                        <div class="skill-title">UEFN Mastery</div>
-                        <div class="skill-number">02</div>
-                    </div>
-                    <p class="skill-desc">Level design, environment creation, and seamless asset integration. Crafting immersive worlds that push the boundaries of Fortnite Creative.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-header">
-                        <div class="skill-title">Game Systems</div>
-                        <div class="skill-number">03</div>
-                    </div>
-                    <p class="skill-desc">UI design, inventory systems, and player progression mechanics. Creating intuitive interfaces and engaging progression that keeps players coming back.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-header">
-                        <div class="skill-title">Optimization</div>
-                        <div class="skill-number">04</div>
-                    </div>
-                    <p class="skill-desc">Performance tuning and memory management for smooth gameplay. Ensuring every experience runs flawlessly across all platforms.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="projects" id="projects">
-        <div class="container">
-            <h2 class="section-title">MY ISLANDS</h2>
-            
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image-wrapper">
-                        <img src="https://cdn-0001.qstv.on.epicgames.com/zHhNkzZLQWwpoQvdWm/image/landscape_comp_b.jpeg" alt="Guess the Song Fortnite Map" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <div class="project-title">GUESS THE SONG</div>
-                        <div class="project-tags">
-                            <span class="project-tag">Music</span>
-                            <span class="project-tag">Minigame</span>
-                            <span class="project-tag">Funny</span>
-                            <span class="project-tag">Deathrun</span>
+            <!-- List Items -->
+            <div class="bg-swiss-black transition-colors duration-300">
+                <!-- Project 1 -->
+                <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
+                    <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-black">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black transition-colors">VERSE / 01</div>
+                        <div class="col-span-1 md:col-span-6">
+                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black transition-colors">Dynamic Scene Graph</h3>
+                        </div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
+                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Component System</span>
+                        </div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="project-card">
-                    <div class="project-image-wrapper">
-                        <img src="https://cdn-0001.qstv.on.epicgames.com/bxgHsgbOxxzeaYnwKS/image/landscape_comp.jpeg" alt="Escape MC Jackson - Fortnite Horror Map" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <div class="project-title">ESCAPE MC JACKSON</div>
-                        <div class="project-tags">
-                            <span class="project-tag">Horror</span>
-                            <span class="project-tag">Survival Horror</span>
-                            <span class="project-tag">Co-op</span>
-                            <span class="project-tag">Escape</span>
+                <!-- Project 2 -->
+                <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
+                    <div class="absolute inset-0 bg-swiss-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-black">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black transition-colors">TOOL / 02</div>
+                        <div class="col-span-1 md:col-span-6">
+                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black transition-colors">Map Optimizer</h3>
+                        </div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
+                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Workflow Tool</span>
+                        </div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i>
                         </div>
                     </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
+                    <div class="absolute inset-0 bg-neutral-900 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-white">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white transition-colors">GAME / 03</div>
+                        <div class="col-span-1 md:col-span-6">
+                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white transition-colors">Procedural Arena</h3>
+                        </div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
+                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white transition-colors">Level Design</span>
+                        </div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-white"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats / Visual Break -->
+        <!-- Set z-[2] so it's lower than Square (z-5) but higher than Grid (z-0) -->
+        <section class="relative z-[2] grid grid-cols-1 md:grid-cols-2 border-b border-neutral-800">
+            <!-- Left: Solid Color Block with Content -->
+            <div class="bg-swiss-yellow p-12 md:p-24 flex flex-col justify-center text-swiss-black relative overflow-hidden transition-colors duration-300">
+                <div class="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-6 opacity-10 pointer-events-none">
+                    <!-- Decorative grid pattern overlay -->
+                    <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
+                    <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
+                    <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
+                </div>
+
+                <div class="relative z-10">
+                    <h2 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 text-swiss-black">100%</h2>
+                    <p class="text-xl font-bold uppercase tracking-widest border-t-4 border-black pt-6 inline-block text-swiss-black">Verse Native</p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <p class="contact-text">
-                Let's make something <span class="contact-text-word" id="changingWord">EPIC</span> together.
-            </p>
-            <div class="contact-links">
-                <a href="#" class="contact-link primary" onclick="showDiscord(event)">Discord</a>
-                <a href="https://x.com/sonoq_" class="contact-link" target="_blank">Twitter</a>
-                <a href="mailto:oscarperibanyez@gmail.com" class="contact-link">Email</a>
+            <!-- Right: Minimal Text -->
+            <div class="bg-swiss-black p-12 md:p-24 flex flex-col justify-center border-l border-neutral-800 transition-colors duration-300">
+                <i data-lucide="terminal" class="w-12 h-12 text-swiss-yellow mb-8"></i>
+                <blockquote class="text-2xl md:text-3xl font-medium leading-tight mb-8 text-swiss-white transition-colors duration-300">
+                    "Talk is cheap. Show me the code."
+                </blockquote>
+                <cite class="text-neutral-500 not-italic font-mono text-sm uppercase transition-colors duration-300">— Linus Torvalds</cite>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Oscar Peribañez. All rights reserved.</p>
-        </div>
-    </footer>
+        <!-- Footer -->
+        <!-- Footer z-20 covers square (z-5) -->
+        <footer id="contact" class="relative z-20 bg-swiss-black text-swiss-white transition-colors duration-300">
+            <!-- Scrolling Marquee - Updated Height and Text Size -->
+            <div class="border-b border-neutral-800 py-6 overflow-hidden bg-neutral-900 text-swiss-white flex items-end h-32 relative z-20 transition-colors duration-300">
+                <div class="whitespace-nowrap animate-marquee inline-block absolute bottom-0 leading-[0.8]">
+                    <span class="text-[10rem] font-black tracking-tighter px-8">UEFN DEVELOPER</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8 text-transparent stroke-text-bold" style="-webkit-text-stroke: 2px var(--text);">VERSE LANGUAGE</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8">SCENE GRAPH</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8 text-transparent stroke-text-bold" style="-webkit-text-stroke: 2px var(--text);">OPTIMIZATION</span>
+                </div>
+            </div>
 
-    <div class="discord-popup-overlay" id="discordOverlay" onclick="closeDiscordPopup()"></div>
-    <div class="discord-popup" id="discordPopup">
-        <h3>Add Me</h3>
-        <p>@sonoq</p>
-        <button class="discord-popup-close" onclick="closeDiscordPopup()">Close</button>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-neutral-800 transition-colors duration-300">
+                <!-- Contact Column -->
+                <div class="col-span-1 md:col-span-4 p-12 flex flex-col justify-between min-h-[300px]">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-6">Contact</h4>
+                        <a href="mailto:oscar@example.com" class="text-3xl font-bold hover:text-swiss-yellow transition-colors block mb-2 text-swiss-white">oscar@example.com</a>
+                        <p class="text-neutral-500">Available for contract work</p>
+                    </div>
+                    <div class="mt-12">
+                        <p class="text-sm text-neutral-400">
+                            Based in<br>
+                            Valencia, Spain<br>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Links Column -->
+                <div class="col-span-1 md:col-span-4 p-12 flex flex-col justify-between min-h-[300px]">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-6">Connect</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="flex items-center justify-between border-b border-neutral-800 pb-2 hover:text-swiss-yellow hover:border-swiss-yellow transition-all text-swiss-white"><span>Twitter / X</span> <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a></li>
+                            <li><a href="#" class="flex items-center justify-between border-b border-neutral-800 pb-2 hover:text-swiss-yellow hover:border-swiss-yellow transition-all text-swiss-white"><span>Discord</span> <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a></li>
+                            <li><a href="#" class="flex items-center justify-between border-b border-neutral-800 pb-2 hover:text-swiss-yellow hover:border-swiss-yellow transition-all text-swiss-white"><span>GitHub</span> <i data-lucide="arrow-up-right" class="w-4 h-4"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="flex gap-4 mt-12">
+                        <div class="w-4 h-4 bg-swiss-yellow rounded-full"></div>
+                        <div class="w-4 h-4 bg-swiss-white rounded-full"></div>
+                        <div class="w-4 h-4 border border-swiss-white rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Big CH -->
+                <div class="col-span-1 md:col-span-4 p-12 flex items-end justify-end relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-neutral-900 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                    <span class="text-[12rem] leading-[0.8] font-black text-neutral-800 group-hover:text-swiss-yellow transition-colors duration-500 relative z-10 select-none">OP</span>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-neutral-800 p-6 flex justify-between items-center text-xs font-mono text-neutral-500 uppercase tracking-wider transition-colors duration-300">
+                <span>© 2025 Oscar Peribañez</span>
+                <span>UEFN / Verse / Epic Games</span>
+            </div>
+        </footer>
+    </main>
 
     <script>
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.toggle('active');
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
+        const htmlElement = document.documentElement;
+
+        const sunIcon = document.getElementById('icon-sun');
+        const moonIcon = document.getElementById('icon-moon');
+        const mobileSunIcon = document.getElementById('mobile-icon-sun');
+        const mobileMoonIcon = document.getElementById('mobile-icon-moon');
+
+        function toggleTheme() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+
+            // Update icons
+            if (newTheme === 'dark') {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+                mobileSunIcon.classList.add('hidden');
+                mobileMoonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+                mobileSunIcon.classList.remove('hidden');
+                mobileMoonIcon.classList.add('hidden');
+            }
         }
 
-        function closeDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.classList.remove('active');
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // Initialize Icons based on default theme
+        if (htmlElement.getAttribute('data-theme') === 'dark') {
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+            mobileSunIcon.classList.add('hidden');
+            mobileMoonIcon.classList.remove('hidden');
+        } else {
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+            mobileSunIcon.classList.remove('hidden');
+            mobileMoonIcon.classList.add('hidden');
         }
 
-        function showDiscord(event) {
-            event.preventDefault();
-            document.getElementById('discordOverlay').classList.add('active');
-            document.getElementById('discordPopup').classList.add('active');
+        // Magnetic Hover Effect
+        const cards = document.querySelectorAll('.magnetic-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Intensified Magnetic Pull: Divided by 3 instead of 10
+                const deltaX = (x - centerX) / 3;
+                const deltaY = (y - centerY) / 3;
+
+                card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Typewriter Effect
+        const words = ["UEFN", "VERSE", "SCENEGRAPH", "CREATIVE"];
+        const typewriterElement = document.getElementById('typewriter');
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function typeEffect() {
+            const currentWord = words[wordIndex];
+
+            if (isDeleting) {
+                typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end of word
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 500; // Pause before next word
+            }
+
+            setTimeout(typeEffect, typeSpeed);
         }
 
-        function closeDiscordPopup() {
-            document.getElementById('discordOverlay').classList.remove('active');
-            document.getElementById('discordPopup').classList.remove('active');
-        }
+        // Start animation when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typewriterElement) typeEffect();
+        });
 
-        // Mouse follow effect for stat cards
-        function handleMouseMove(e, card) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const deltaX = (x - centerX) / centerX;
-            const deltaY = (y - centerY) / centerY;
-            
-            const moveX = deltaX * 15;
-            const moveY = deltaY * 15;
-            
-            card.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        }
-
-        function handleMouseLeave(card) {
-            card.style.transform = 'translate(0, 0)';
-        }
-
-        // Animate numbers
-        function animateNumber(element, target) {
-            const duration = 2000;
-            const start = 0;
-            const increment = target / (duration / 16);
-            let current = start;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    if (target >= 1000000) {
-                        element.textContent = (target / 1000000).toFixed(0) + 'M+';
-                    } else if (target >= 1000) {
-                        element.textContent = (target / 1000).toFixed(1) + 'K+';
-                    } else {
-                        element.textContent = target + '+';
-                    }
-                    clearInterval(timer);
-                } else {
-                    if (target >= 1000000) {
-                        element.textContent = (current / 1000000).toFixed(1) + 'M+';
-                    } else if (target >= 1000) {
-                        element.textContent = (current / 1000).toFixed(1) + 'K+';
-                    } else {
-                        element.textContent = Math.floor(current) + '+';
-                    }
-                }
-            }, 16);
-        }
-
-        // Intersection Observer for number animation
+        // Number Counter Animation
         const observerOptions = {
             threshold: 0.5
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-                    entry.target.classList.add('animated');
-                    const numbers = entry.target.querySelectorAll('.stat-number');
-                    numbers.forEach((num, index) => {
-                        const targets = [10, 20000000, 1500];
-                        animateNumber(num, targets[index]);
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.count-up');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000; // 2 seconds
+                        const frameDuration = 1000 / 60;
+                        const totalFrames = Math.round(duration / frameDuration);
+                        const easeOutQuad = t => t * (2 - t);
+
+                        let frame = 0;
+                        const updateCounter = () => {
+                            frame++;
+                            const progress = easeOutQuad(frame / totalFrames);
+                            const current = Math.round(target * progress);
+
+                            if (frame < totalFrames) {
+                                counter.innerText = current;
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
                     });
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Observe the stats section
-        document.addEventListener('DOMContentLoaded', () => {
-            const statsSection = document.querySelector('.about-stats');
-            if (statsSection) {
-                observer.observe(statsSection);
-            }
+        const expertiseSection = document.getElementById('expertise');
+        if (expertiseSection) observer.observe(expertiseSection);
 
-            // Changing word animation with letter-by-letter erase/rewrite
-            const words = ['EPIC', 'CREATIVE', 'BREATHTAKING', 'INNOVATIVE', 'AMAZING'];
-            let currentIndex = 0;
-            const wordElement = document.getElementById('changingWord');
-            let isAnimating = false;
+        // Scroll Square Logic - Simplified to just Rotate
+        const square = document.getElementById('scroll-square');
 
-            async function eraseWord(word) {
-                for (let i = word.length; i >= 0; i--) {
-                    wordElement.textContent = word.substring(0, i);
-                    await new Promise(resolve => setTimeout(resolve, 50));
-                }
-            }
+        function updateScrollSquare() {
+            if (!square) return;
+            const scrollY = window.scrollY;
 
-            async function writeWord(word) {
-                for (let i = 0; i <= word.length; i++) {
-                    wordElement.textContent = word.substring(0, i);
-                    await new Promise(resolve => setTimeout(resolve, 80));
-                }
-            }
+            // Only Animation: Rotate based on scroll
+            // No stopping logic needed as z-index layering handles the hiding
+            square.style.transform = `rotate(${scrollY * 0.4}deg)`;
+        }
 
-            async function changeWord() {
-                if (isAnimating) return;
-                isAnimating = true;
-
-                const currentWord = words[currentIndex];
-                await eraseWord(currentWord);
-                
-                currentIndex = (currentIndex + 1) % words.length;
-                const nextWord = words[currentIndex];
-                
-                await writeWord(nextWord);
-                isAnimating = false;
-            }
-
-            // Start the animation cycle
-            setInterval(changeWord, 4000);
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const toggle = document.querySelector('.home-hub-toggle');
-            
-            if (!dropdown.contains(event.target) && !toggle.contains(event.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
+        // Initial call and event listener
+        window.addEventListener('scroll', updateScrollSquare);
+        document.addEventListener('DOMContentLoaded', updateScrollSquare);
     </script>
 </body>
 </html>
