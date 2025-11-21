@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" data-theme="dark">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oscar Peribañez | UEFN Verse Developer</title>
+    <title>OSCAR.DEV</title>
     <meta name="description" content="Portfolio of Oscar Peribañez, UEFN Verse Developer specializing in Scene Graph mechanics and optimization.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%233aad28%22/></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            /* Dark Mode (Default) */
+            /* Solo variables Dark Mode */
             --bg: #0a0a0a;
             --bg-secondary: #111111;
             --text: #f5f5f5;
@@ -21,110 +24,55 @@
             --card-bg: #171717;
             --border: #262626;
             --border-light: #404040;
-            /* Líneas de la cuadrícula más oscuras para dark mode */
             --grid-line: #171717;
             --text-muted: #737373;
-            --text-muted-light: #a3a3a3;
-            --text-muted-lighter: #d4d4d4;
         }
 
-        [data-theme="light"] {
-            /* Light Mode */
-            --bg: #f5f5f5;
-            --bg-secondary: #ffffff;
-            --text: #0a0a0a;
-            --accent: #3aad28;
-            --card-bg: #ffffff;
-            --border: #e5e5e5;
-            --border-light: #d4d4d4;
-            /* Líneas de la cuadrícula normales para light mode */
-            --grid-line: #e5e5e5;
-            --text-muted: #525252;
-            --text-muted-light: #404040;
-            --text-muted-lighter: #262626;
-        }
-
+        /* Scrollbar Oculta (Estética minimalista) */
+        html { scrollbar-width: none; }
+        body::-webkit-scrollbar { display: none; }
+        
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Custom utility for text outlines - adapted for theme */
-        .stroke-text {
-            -webkit-text-stroke: 1px var(--text);
-            color: transparent;
-        }
+        /* Mobile Menu Open State */
+        body.menu-open { overflow: hidden; }
 
-        .stroke-text-bold {
-            -webkit-text-stroke: 2px var(--text);
-            color: transparent;
-        }
+        /* Utilidades de Texto y Animación */
+        .stroke-text { -webkit-text-stroke: 1px var(--text); color: transparent; }
+        
+        .animate-marquee { animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* Smooth hover transitions */
-        .hover-accent {
-            transition: all 0.3s ease;
-        }
-
-            .hover-accent:hover {
-                color: var(--accent);
-            }
-
-        /* Magnetic Card Effect */
-        .magnetic-wrap {
-            display: inline-block;
-            position: relative;
-        }
-
-        .magnetic-card {
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Faster transition for snappier feel */
-            will-change: transform;
-        }
-
-        /* Custom Marquee Animation */
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .animate-marquee {
-            animation: marquee 30s linear infinite;
-        }
-
-        /* Custom Selection Color */
-        ::selection {
-            background-color: var(--accent);
-            color: black;
-        }
-
-        /* Typewriter Cursor */
+        /* Cursor de escritura */
         .typing-cursor::after {
-            content: '';
-            display: inline-block;
-            width: 0.1em;
-            height: 1em;
-            background-color: var(--accent);
-            margin-left: 0.1em;
-            vertical-align: text-bottom;
+            content: ''; display: inline-block; width: 0.1em; height: 1em;
+            background-color: var(--accent); margin-left: 0.1em; vertical-align: text-bottom;
             animation: blink 1s step-end infinite;
         }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        @keyframes blink {
-            0%, 100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
+        /* Animación de Revelado (Quote) */
+        .reveal-line { position: relative; display: block; overflow: hidden; margin-bottom: 0.5rem; }
+        .reveal-content { opacity: 0; display: inline-block; }
+        .reveal-block {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--accent); transform: translateX(-101%); z-index: 2;
         }
+        .animate-reveal-block { animation: block-swipe 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards; }
+        .animate-reveal-content { animation: content-appear 0s 0.4s forwards; }
+
+        @keyframes block-swipe {
+            0% { transform: translateX(-101%); } 50% { transform: translateX(0); } 100% { transform: translateX(101%); }
+        }
+        @keyframes content-appear { to { opacity: 1; } }
+
+        /* Selección de texto en verde */
+        ::selection { background-color: var(--accent); color: black; }
     </style>
     <script>
         tailwind.config = {
@@ -143,13 +91,9 @@
                             800: 'var(--border)',
                             700: 'var(--border-light)',
                             500: 'var(--text-muted)',
-                            400: 'var(--text-muted-light)',
-                            300: 'var(--text-muted-lighter)',
                         }
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
@@ -157,275 +101,196 @@
 </head>
 <body class="antialiased">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 top-0 bg-swiss-black/90 backdrop-blur-md border-b border-neutral-800 transition-colors duration-300">
+    <div id="mobile-menu" class="fixed inset-0 bg-swiss-black z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-24 px-8 md:hidden">
+        <nav class="flex flex-col space-y-8">
+            <a href="#projects" class="mobile-link text-5xl font-black tracking-tighter text-swiss-white hover:text-swiss-yellow transition-colors uppercase">Projects</a>
+            <a href="#contact" class="mobile-link text-5xl font-black tracking-tighter text-swiss-white hover:text-swiss-yellow transition-colors uppercase">Contact</a>
+        </nav>
+        
+        <div class="mt-auto mb-12">
+            <div class="h-px w-full bg-neutral-800 mb-8"></div>
+            <div class="flex gap-6">
+                <a href="#" class="text-neutral-500 hover:text-swiss-yellow transition-colors">Twitter</a>
+                <a href="#" class="text-neutral-500 hover:text-swiss-yellow transition-colors">Discord</a>
+                <a href="#" class="text-neutral-500 hover:text-swiss-yellow transition-colors">GitHub</a>
+            </div>
+            <p class="text-neutral-600 text-xs mt-6 font-mono">© 2025 OSCAR.DEV</p>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 bg-swiss-black/90 backdrop-blur-md border-b border-neutral-800">
         <div class="max-w-[1920px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-            <!-- Logo Area -->
-            <div class="flex items-center gap-3 group cursor-pointer">
+            <div class="flex items-center gap-3 group cursor-pointer relative z-50">
                 <div class="w-3 h-3 bg-swiss-yellow transition-transform group-hover:scale-150 duration-300"></div>
                 <span class="text-xl font-bold tracking-tighter">OSCAR<span class="text-swiss-yellow">.</span>DEV</span>
             </div>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-12">
                 <div class="flex space-x-12 text-xs font-bold tracking-[0.2em] uppercase">
                     <a href="#projects" class="hover:text-swiss-yellow transition-colors relative group">
-                        Projects
-                        <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
+                        Projects <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#contact" class="hover:text-swiss-yellow transition-colors relative group">
-                        Contact
-                        <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
+                        Contact <span class="absolute -bottom-2 left-0 w-0 h-[2px] bg-swiss-yellow transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </div>
-
-                <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-neutral-800 transition-colors text-swiss-white" aria-label="Toggle Dark Mode">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block" id="icon-sun"></i>
-                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden" id="icon-moon"></i>
-                </button>
             </div>
 
-            <!-- Mobile Menu Button & Theme Toggle -->
-            <div class="flex items-center gap-4 md:hidden">
-                <button id="theme-toggle-mobile" class="text-swiss-white hover:text-swiss-yellow transition-colors">
-                    <i data-lucide="sun" class="w-5 h-5 hidden" id="mobile-icon-sun"></i>
-                    <i data-lucide="moon" class="w-5 h-5" id="mobile-icon-moon"></i>
-                </button>
-                <button class="text-swiss-white hover:text-swiss-yellow transition-colors">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
+            <div class="flex items-center gap-4 md:hidden relative z-50">
+                <button id="mobile-menu-toggle" class="text-swiss-white hover:text-swiss-yellow transition-colors" aria-label="Menu">
+                    <i data-lucide="menu" class="w-6 h-6" id="icon-menu"></i>
+                    <i data-lucide="x" class="w-6 h-6 hidden" id="icon-close"></i>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Layout -->
-    <main class="pt-20 max-w-[1920px] mx-auto border-l border-r border-neutral-800 min-h-screen relative transition-colors duration-300">
+    <main class="pt-20 max-w-[1920px] mx-auto border-l border-r border-neutral-800 min-h-screen relative">
 
-        <!-- Vertical Grid Lines (Background) -->
         <div class="absolute inset-0 pointer-events-none z-0 grid grid-cols-4 md:grid-cols-12 gap-0 w-full h-full">
-            <div class="border-r border-swiss-grid h-full"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full hidden md:block"></div>
-            <div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full"></div><div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div><div class="border-r border-swiss-grid h-full"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div><div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full"></div><div class="border-r border-swiss-grid h-full hidden md:block"></div>
+            <div class="border-r border-swiss-grid h-full hidden md:block"></div><div class="border-r border-swiss-grid h-full"></div>
             <div class="border-r border-swiss-grid h-full hidden md:block"></div>
         </div>
 
-        <!-- Scroll Follower Square -->
-        <div id="scroll-square" class="fixed top-32 right-12 md:right-24 w-20 h-20 bg-swiss-yellow z-[5] hidden md:block shadow-[0_0_30px_rgba(58,173,40,0.2)] transition-colors duration-300"></div>
+        <div id="scroll-square" class="fixed top-32 right-12 md:right-24 w-20 h-20 bg-swiss-yellow z-[5] hidden md:block shadow-[0_0_30px_rgba(58,173,40,0.2)]"></div>
 
-        <!-- Hero Section -->
         <section class="relative z-10 min-h-[85vh] flex flex-col justify-center border-b border-neutral-800">
             <div class="grid grid-cols-1 md:grid-cols-12 h-full">
-
-                <!-- Big Headline -->
                 <div class="col-span-1 md:col-span-12 p-6 md:p-12 flex flex-col justify-center">
-                    <h1 class="text-[12vw] md:text-[9rem] xl:text-[11rem] leading-[0.8] font-black tracking-tighter uppercase mix-blend-exclusion mb-6 text-swiss-white transition-colors duration-300">
+                    <h1 class="text-[12vw] md:text-[9rem] xl:text-[11rem] leading-[0.8] font-black tracking-tighter uppercase mix-blend-exclusion mb-6 text-swiss-white">
                         Oscar<br>
                         <span class="text-swiss-yellow">Peribañez</span><span class="text-swiss-white">.</span>
                     </h1>
-                    <h2 class="text-xl md:text-3xl font-bold uppercase tracking-[0.2em] text-neutral-400 pl-1 ml-1 md:ml-2 transition-colors duration-300">
+                    <h2 class="text-xl md:text-3xl font-bold uppercase tracking-[0.2em] text-neutral-400 pl-1 ml-1 md:ml-2">
                         <span id="typewriter" class="text-swiss-yellow"></span><span class="typing-cursor"></span> Developer
                     </h2>
                 </div>
-
             </div>
         </section>
 
-        <!-- Expertise Section (Hitbox & Gaps Fix) -->
-        <section id="expertise" class="relative z-10 border-b border-neutral-800 bg-swiss-black py-24 overflow-hidden transition-colors duration-300">
+        <section id="expertise" class="relative z-10 border-b border-neutral-800 bg-swiss-black py-24 overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
                 <div class="w-full h-full" style="background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 40px 40px;"></div>
             </div>
-
             <div class="max-w-[1920px] mx-auto px-6 md:px-12">
-                <!-- gap-0 ensures the containers touch each other (continuous hitbox) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
-
-                    <!-- Hitbox 01: The 'group' is on this wrapper so padding counts as hover area -->
                     <div class="group w-full p-4">
-                        <!-- Padding creates the visual gap -->
-                        <!-- Visual Card 01: Responds to group-hover -->
                         <div class="aspect-square relative bg-neutral-900 border border-neutral-800 p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-4 group-hover:shadow-[0_20px_50px_-20px_rgba(58,173,40,0.3)] group-hover:border-swiss-yellow group-hover:z-10">
-                            <!-- Hover Background Overlay -->
                             <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-
-                            <div class="relative z-10 flex justify-end items-start">
-                                <i data-lucide="gamepad-2" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i>
-                            </div>
-
+                            <div class="relative z-10 flex justify-end items-start"><i data-lucide="gamepad-2" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i></div>
                             <div class="relative z-10 flex flex-col justify-end h-full pb-2">
-                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300">
-                                    <span class="count-up" data-target="20">0</span>M+
-                                </h3>
+                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300"><span class="count-up" data-target="20">0</span>M+</h3>
                                 <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors duration-300 opacity-70 group-hover:opacity-100">Plays</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Hitbox 02 -->
                     <div class="group w-full p-4">
-                        <!-- Visual Card 02 -->
                         <div class="aspect-square relative bg-neutral-900 border border-neutral-800 p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-4 group-hover:shadow-[0_20px_50px_-20px_rgba(58,173,40,0.3)] group-hover:border-swiss-yellow group-hover:z-10">
-                            <!-- Hover Background Overlay -->
                             <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-
-                            <div class="relative z-10 flex justify-end items-start">
-                                <i data-lucide="briefcase" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i>
-                            </div>
-
+                            <div class="relative z-10 flex justify-end items-start"><i data-lucide="briefcase" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i></div>
                             <div class="relative z-10 flex flex-col justify-end h-full pb-2">
-                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300">
-                                    <span class="count-up" data-target="10">0</span>+
-                                </h3>
-                                <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors duration-300 opacity-70 group-hover:opacity-100">Projects Helped</p>
+                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300"><span class="count-up" data-target="10">0</span>+</h3>
+                                <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors duration-300 opacity-70 group-hover:opacity-100">Projects</p>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Hitbox 03 -->
                     <div class="group w-full p-4">
-                        <!-- Visual Card 03 -->
                         <div class="aspect-square relative bg-neutral-900 border border-neutral-800 p-8 flex flex-col justify-between overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-4 group-hover:shadow-[0_20px_50px_-20px_rgba(58,173,40,0.3)] group-hover:border-swiss-yellow group-hover:z-10">
-                            <!-- Hover Background Overlay -->
                             <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-
-                            <div class="relative z-10 flex justify-end items-start">
-                                <i data-lucide="users" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i>
-                            </div>
-
+                            <div class="relative z-10 flex justify-end items-start"><i data-lucide="users" class="w-8 h-8 text-swiss-yellow group-hover:text-swiss-black transition-colors duration-300"></i></div>
                             <div class="relative z-10 flex flex-col justify-end h-full pb-2">
-                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300">
-                                    <span class="count-up" data-target="2">0</span>K+
-                                </h3>
+                                <h3 class="text-6xl md:text-8xl font-black tracking-tighter mb-2 text-swiss-white group-hover:text-swiss-black transition-colors duration-300"><span class="count-up" data-target="2">0</span>K+</h3>
                                 <p class="text-xl font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors duration-300 opacity-70 group-hover:opacity-100">Followers</p>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <!-- Selected Projects List -->
-        <section id="projects" class="relative z-10 transition-colors duration-300">
-            <!-- Section Header -->
-            <div class="grid grid-cols-1 md:grid-cols-12 border-b border-neutral-800 bg-swiss-black transition-colors duration-300">
-                <div class="col-span-1 md:col-span-3 p-8 md:p-12 border-r border-neutral-800 flex flex-col justify-between transition-colors duration-300">
+        <section id="projects" class="relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 border-b border-neutral-800 bg-swiss-black">
+                <div class="col-span-1 md:col-span-3 p-8 md:p-12 border-r border-neutral-800 flex flex-col justify-between bg-neutral-900">
                     <div class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-2">Selected Works</div>
                     <h2 class="text-4xl font-bold leading-tight text-swiss-white">UEFN<br>Projects</h2>
                 </div>
                 <div class="col-span-1 md:col-span-9 p-8 md:p-12 flex items-center">
-                    <p class="text-neutral-400 max-w-xl transition-colors duration-300">
+                    <p class="text-neutral-400 max-w-xl">
                         A showcase of technical implementations pushing the boundaries of Fortnite Creative. From custom component systems to automated toolsets.
                     </p>
                 </div>
             </div>
 
-            <!-- List Items -->
-            <div class="bg-swiss-black transition-colors duration-300">
-                <!-- Project 1 -->
+            <div class="bg-swiss-black">
                 <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
                     <div class="absolute inset-0 bg-swiss-yellow transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-black">
-                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black transition-colors">VERSE / 01</div>
-                        <div class="col-span-1 md:col-span-6">
-                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black transition-colors">Dynamic Scene Graph</h3>
-                        </div>
-                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
-                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Component System</span>
-                        </div>
-                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i>
-                        </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center group-hover:text-swiss-black transition-colors duration-300">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black">VERSE / 01</div>
+                        <div class="col-span-1 md:col-span-6"><h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black">Dynamic Scene Graph</h3></div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0"><span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black">Component System</span></div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i></div>
                     </div>
                 </a>
-
-                <!-- Project 2 -->
                 <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
                     <div class="absolute inset-0 bg-swiss-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-black">
-                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black transition-colors">TOOL / 02</div>
-                        <div class="col-span-1 md:col-span-6">
-                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black transition-colors">Map Optimizer</h3>
-                        </div>
-                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
-                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black transition-colors">Workflow Tool</span>
-                        </div>
-                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i>
-                        </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center group-hover:text-swiss-black transition-colors duration-300">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white group-hover:text-swiss-black">TOOL / 02</div>
+                        <div class="col-span-1 md:col-span-6"><h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white group-hover:text-swiss-black">Map Optimizer</h3></div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0"><span class="text-xs font-bold uppercase tracking-widest text-swiss-white group-hover:text-swiss-black">Workflow Tool</span></div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-black"></i></div>
                     </div>
                 </a>
-
-                <!-- Project 3 -->
                 <a href="#" class="block group relative border-b border-neutral-800 overflow-hidden">
                     <div class="absolute inset-0 bg-neutral-900 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center transition-colors duration-300 group-hover:text-swiss-white">
-                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white transition-colors">GAME / 03</div>
-                        <div class="col-span-1 md:col-span-6">
-                            <h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white transition-colors">Procedural Arena</h3>
-                        </div>
-                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0">
-                            <span class="text-xs font-bold uppercase tracking-widest text-swiss-white transition-colors">Level Design</span>
-                        </div>
-                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-white"></i>
-                        </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 p-8 md:p-10 items-center group-hover:text-swiss-white transition-colors duration-300">
+                        <div class="col-span-1 md:col-span-2 font-mono text-xs opacity-50 group-hover:opacity-100 text-swiss-white">GAME / 03</div>
+                        <div class="col-span-1 md:col-span-6"><h3 class="text-3xl md:text-5xl font-bold tracking-tighter uppercase text-swiss-white">Procedural Arena</h3></div>
+                        <div class="col-span-1 md:col-span-3 text-right md:text-left mt-2 md:mt-0"><span class="text-xs font-bold uppercase tracking-widest text-swiss-white">Level Design</span></div>
+                        <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity duration-300"><i data-lucide="arrow-up-right" class="w-6 h-6 ml-auto text-swiss-white"></i></div>
                     </div>
                 </a>
             </div>
         </section>
 
-        <!-- Stats / Visual Break -->
-        <!-- Set z-[2] so it's lower than Square (z-5) but higher than Grid (z-0) -->
-        <section class="relative z-[2] grid grid-cols-1 md:grid-cols-2 border-b border-neutral-800">
-            <!-- Left: Solid Color Block with Content -->
-            <div class="bg-swiss-yellow p-12 md:p-24 flex flex-col justify-center text-swiss-black relative overflow-hidden transition-colors duration-300">
+        <section id="quote-section" class="relative grid grid-cols-1 md:grid-cols-2 border-b border-neutral-800">
+            <div class="bg-swiss-yellow p-12 md:p-24 flex flex-col justify-center text-swiss-black relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-6 opacity-10 pointer-events-none">
-                    <!-- Decorative grid pattern overlay -->
                     <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
                     <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
                     <div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-r border-b border-black"></div><div class="border-b border-black"></div>
                 </div>
-
                 <div class="relative z-10">
                     <h2 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 text-swiss-black">100%</h2>
                     <p class="text-xl font-bold uppercase tracking-widest border-t-4 border-black pt-6 inline-block text-swiss-black">Verse Native</p>
                 </div>
             </div>
-
-            <!-- Right: Minimal Text -->
-            <div class="bg-swiss-black p-12 md:p-24 flex flex-col justify-center border-l border-neutral-800 transition-colors duration-300">
-                <i data-lucide="terminal" class="w-12 h-12 text-swiss-yellow mb-8"></i>
-                <blockquote class="text-2xl md:text-3xl font-medium leading-tight mb-8 text-swiss-white transition-colors duration-300">
-                    "Talk is cheap. Show me the code."
+            <div class="bg-swiss-black p-12 md:p-24 flex flex-col justify-center border-l border-neutral-800">
+                <blockquote class="relative z-20 text-2xl md:text-3xl font-medium leading-tight mb-8 text-swiss-white">
+                    <div class="reveal-line"><span class="reveal-content">"If you aren't making</span><div class="reveal-block"></div></div>
+                    <div class="reveal-line"><span class="reveal-content">someone mad, you probably</span><div class="reveal-block" style="animation-delay: 0.2s;"></div></div>
+                    <div class="reveal-line"><span class="reveal-content">aren't doing anything important."</span><div class="reveal-block" style="animation-delay: 0.4s;"></div></div>
                 </blockquote>
-                <cite class="text-neutral-500 not-italic font-mono text-sm uppercase transition-colors duration-300">— Linus Torvalds</cite>
+                <cite class="relative z-20 text-neutral-500 not-italic font-mono text-sm uppercase mt-4 block">— Tim Sweeney</cite>
             </div>
         </section>
 
-        <!-- Footer -->
-        <!-- Footer z-20 covers square (z-5) -->
-        <footer id="contact" class="relative z-20 bg-swiss-black text-swiss-white transition-colors duration-300">
-            <!-- Scrolling Marquee - Updated Height and Text Size -->
-            <div class="border-b border-neutral-800 py-6 overflow-hidden bg-neutral-900 text-swiss-white flex items-end h-32 relative z-20 transition-colors duration-300">
+        <footer id="contact" class="relative z-20 bg-swiss-black text-swiss-white">
+            <div class="border-b border-neutral-800 py-6 overflow-hidden bg-neutral-900 text-swiss-white flex items-end h-32 relative z-20">
                 <div class="whitespace-nowrap animate-marquee inline-block absolute bottom-0 leading-[0.8]">
-                    <span class="text-[10rem] font-black tracking-tighter px-8">UEFN DEVELOPER</span>
-                    <span class="text-[10rem] font-black tracking-tighter px-8 text-transparent stroke-text-bold" style="-webkit-text-stroke: 2px var(--text);">VERSE LANGUAGE</span>
-                    <span class="text-[10rem] font-black tracking-tighter px-8">SCENE GRAPH</span>
-                    <span class="text-[10rem] font-black tracking-tighter px-8 text-transparent stroke-text-bold" style="-webkit-text-stroke: 2px var(--text);">OPTIMIZATION</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8">UEFN</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8 text-swiss-white">VERSE</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8">SCENEGRAPH</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8">UEFN</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8 text-swiss-white">VERSE</span>
+                    <span class="text-[10rem] font-black tracking-tighter px-8">SCENEGRAPH</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-neutral-800 transition-colors duration-300">
-                <!-- Contact Column -->
+            <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-neutral-800">
                 <div class="col-span-1 md:col-span-4 p-12 flex flex-col justify-between min-h-[300px]">
                     <div>
                         <h4 class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-6">Contact</h4>
@@ -433,14 +298,10 @@
                         <p class="text-neutral-500">Available for contract work</p>
                     </div>
                     <div class="mt-12">
-                        <p class="text-sm text-neutral-400">
-                            Based in<br>
-                            Valencia, Spain<br>
-                        </p>
+                        <p class="text-sm text-neutral-400">Based in<br>Valencia, Spain<br></p>
                     </div>
                 </div>
 
-                <!-- Links Column -->
                 <div class="col-span-1 md:col-span-4 p-12 flex flex-col justify-between min-h-[300px]">
                     <div>
                         <h4 class="text-xs font-bold uppercase tracking-widest text-swiss-yellow mb-6">Connect</h4>
@@ -457,15 +318,13 @@
                     </div>
                 </div>
 
-                <!-- Big CH -->
                 <div class="col-span-1 md:col-span-4 p-12 flex items-end justify-end relative overflow-hidden group">
                     <div class="absolute inset-0 bg-neutral-900 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                     <span class="text-[12rem] leading-[0.8] font-black text-neutral-800 group-hover:text-swiss-yellow transition-colors duration-500 relative z-10 select-none">OP</span>
                 </div>
             </div>
 
-            <!-- Copyright -->
-            <div class="border-t border-neutral-800 p-6 flex justify-between items-center text-xs font-mono text-neutral-500 uppercase tracking-wider transition-colors duration-300">
+            <div class="border-t border-neutral-800 p-6 flex justify-between items-center text-xs font-mono text-neutral-500 uppercase tracking-wider">
                 <span>© 2025 Oscar Peribañez</span>
                 <span>UEFN / Verse / Epic Games</span>
             </div>
@@ -473,55 +332,33 @@
     </main>
 
     <script>
-        // Initialize Lucide Icons
+        // Init Icons
         lucide.createIcons();
 
-        // Theme Toggle Logic
-        const themeToggle = document.getElementById('theme-toggle');
-        const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
-        const htmlElement = document.documentElement;
+        // --- MENU MOVIL ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconMenu = document.getElementById('icon-menu');
+        const iconClose = document.getElementById('icon-close');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-        const sunIcon = document.getElementById('icon-sun');
-        const moonIcon = document.getElementById('icon-moon');
-        const mobileSunIcon = document.getElementById('mobile-icon-sun');
-        const mobileMoonIcon = document.getElementById('mobile-icon-moon');
-
-        function toggleTheme() {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            htmlElement.setAttribute('data-theme', newTheme);
-
-            // Update icons
-            if (newTheme === 'dark') {
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-                mobileSunIcon.classList.add('hidden');
-                mobileMoonIcon.classList.remove('hidden');
+        function toggleMobileMenu() {
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+            if (isOpen) {
+                mobileMenu.classList.add('translate-x-full');
+                iconMenu.classList.remove('hidden'); iconClose.classList.add('hidden');
+                document.body.classList.remove('menu-open');
             } else {
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-                mobileSunIcon.classList.remove('hidden');
-                mobileMoonIcon.classList.add('hidden');
+                mobileMenu.classList.remove('translate-x-full');
+                iconMenu.classList.add('hidden'); iconClose.classList.remove('hidden');
+                document.body.classList.add('menu-open');
             }
         }
 
-        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMobileMenu));
 
-        // Initialize Icons based on default theme
-        if (htmlElement.getAttribute('data-theme') === 'dark') {
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
-            mobileSunIcon.classList.add('hidden');
-            mobileMoonIcon.classList.remove('hidden');
-        } else {
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
-            mobileSunIcon.classList.remove('hidden');
-            mobileMoonIcon.classList.add('hidden');
-        }
-
-        // Typewriter Effect
+        // --- TYPEWRITER EFFECT ---
         const words = ["UEFN", "VERSE", "SCENEGRAPH", "CREATIVE"];
         const typewriterElement = document.getElementById('typewriter');
         let wordIndex = 0;
@@ -530,8 +367,9 @@
         let typeSpeed = 100;
 
         function typeEffect() {
+            if (!typewriterElement) return;
             const currentWord = words[wordIndex];
-
+            
             if (isDeleting) {
                 typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
                 charIndex--;
@@ -544,75 +382,60 @@
 
             if (!isDeleting && charIndex === currentWord.length) {
                 isDeleting = true;
-                typeSpeed = 2000; // Pause at end of word
+                typeSpeed = 2000;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 wordIndex = (wordIndex + 1) % words.length;
-                typeSpeed = 500; // Pause before next word
+                typeSpeed = 500;
             }
-
             setTimeout(typeEffect, typeSpeed);
         }
+        document.addEventListener('DOMContentLoaded', typeEffect);
 
-        // Start animation when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typewriterElement) typeEffect();
-        });
-
-        // Number Counter Animation
-        const observerOptions = {
-            threshold: 0.5
-        };
-
+        // --- ANIMACIONES SCROLL (Count Up & Reveal) ---
+        const observerOptions = { threshold: 0.5 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const counters = entry.target.querySelectorAll('.count-up');
-                    counters.forEach(counter => {
-                        const target = +counter.getAttribute('data-target');
-                        const duration = 2000; // 2 seconds
-                        const frameDuration = 1000 / 60;
-                        const totalFrames = Math.round(duration / frameDuration);
-                        const easeOutQuad = t => t * (2 - t);
-
-                        let frame = 0;
-                        const updateCounter = () => {
-                            frame++;
-                            const progress = easeOutQuad(frame / totalFrames);
-                            const current = Math.round(target * progress);
-
-                            if (frame < totalFrames) {
-                                counter.innerText = current;
-                                requestAnimationFrame(updateCounter);
-                            } else {
-                                counter.innerText = target;
-                            }
-                        };
-                        updateCounter();
-                    });
-                    observer.unobserve(entry.target);
+                    // Numbers
+                    if (entry.target.id === 'expertise') {
+                        entry.target.querySelectorAll('.count-up').forEach(counter => {
+                            const target = +counter.getAttribute('data-target');
+                            let frame = 0;
+                            const duration = 120; // approx 2s at 60fps
+                            const update = () => {
+                                frame++;
+                                // Simple Ease Out
+                                const progress = frame / duration;
+                                const ease = progress * (2 - progress); 
+                                counter.innerText = Math.round(target * ease);
+                                if (frame < duration) requestAnimationFrame(update);
+                                else counter.innerText = target;
+                            };
+                            update();
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                    // Quotes
+                    if (entry.target.id === 'quote-section') {
+                        entry.target.querySelectorAll('.reveal-block').forEach(b => b.classList.add('animate-reveal-block'));
+                        entry.target.querySelectorAll('.reveal-content').forEach(c => c.classList.add('animate-reveal-content'));
+                        observer.unobserve(entry.target);
+                    }
                 }
             });
         }, observerOptions);
 
-        const expertiseSection = document.getElementById('expertise');
-        if (expertiseSection) observer.observe(expertiseSection);
+        if (document.getElementById('expertise')) observer.observe(document.getElementById('expertise'));
+        if (document.getElementById('quote-section')) observer.observe(document.getElementById('quote-section'));
 
-        // Scroll Square Logic - Simplified to just Rotate
+        // --- SCROLL SQUARE (Solo rotación) ---
         const square = document.getElementById('scroll-square');
-
         function updateScrollSquare() {
             if (!square) return;
-            const scrollY = window.scrollY;
-
-            // Only Animation: Rotate based on scroll
-            // No stopping logic needed as z-index layering handles the hiding
-            square.style.transform = `rotate(${scrollY * 0.4}deg)`;
+            square.style.transform = `rotate(${window.scrollY * 0.4}deg)`;
         }
-
-        // Initial call and event listener
         window.addEventListener('scroll', updateScrollSquare);
-        document.addEventListener('DOMContentLoaded', updateScrollSquare);
     </script>
 </body>
 </html>
